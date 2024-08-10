@@ -1,5 +1,7 @@
 import { Product } from "@/App";
-import { randomUUID, UUID } from "crypto";
+import { randomUUID } from "crypto";
+
+export type UUID = `${string}-${string}-${string}-${string}`;
 
 /**
  * Class of Tag's
@@ -25,7 +27,7 @@ export class Tag {
      * @param {Tag | Tag[]} tagB 
      * @returns {Tag[]} - array of combine tags.
      */
-    combine2Tags(tagA: Tag | Tag[], tagB: Tag | Tag[]): Tag[] {
+    static combine2Tags(tagA: Tag | Tag[], tagB: Tag | Tag[]): Tag[] {
         let response: Tag[] = [];
         if(Array.isArray(tagA)) {
             response = [...response, ...tagA];
@@ -41,6 +43,25 @@ export class Tag {
         }
 
         return response;
+    }
+    /**
+     * Add '#' to tagname o tagnames if is array.
+     * @param {Tag | Tag[]} tag - tag to add style '#'
+     */
+    static styledTag(tag: Tag | Tag[]) {
+        const cloneTag = { ...tag };
+        if(cloneTag instanceof Tag) {
+            cloneTag.name = '#'+ cloneTag.name;
+        }
+        if(Array.isArray(cloneTag)) {
+            cloneTag.map( t => {
+                return {
+                    ...t,
+                    name: `#${t.name}`
+                };
+            });
+        }
+        return cloneTag;
     }
 };
 export type API_RESPONSE<T> = {
